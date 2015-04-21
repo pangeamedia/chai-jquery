@@ -156,7 +156,7 @@
     );
   });
 
-  $.each(['visible', 'hidden', 'selected', 'checked', 'enabled', 'disabled'], function (i, attr) {
+  ['visible', 'hidden', 'selected', 'checked', 'enabled', 'disabled'].forEach(function (attr) {
     chai.Assertion.addProperty(attr, function () {
       this.assert(
           flag(this, 'object').is(':' + attr)
