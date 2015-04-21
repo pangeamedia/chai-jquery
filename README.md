@@ -5,11 +5,21 @@ provides a set of jQuery-specific assertions.
 
 ## Usage
 
+### On client side
+
 Include `chai-jquery.js` in your test file, after `chai.js` (version 1.0.0-rc1 or later):
 
     <script src="chai-jquery.js"></script>
 
 Use the assertions with chai's `expect` or `should` assertions.
+
+### With node.js
+    
+    var chai = require('chai')
+    var chaiJquery = require('chai-jquery')
+    chai.use(function (ch, util) {
+        chaiJquery(ch, util, {})
+    })
 
 ## Assertions
 
