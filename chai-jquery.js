@@ -41,16 +41,18 @@
       copyProperties(object, Object.getPrototypeOf(prototype));
     };
 
-  $.fn.inspect = function (depth) {
-    var el = $('<div />').append(this.clone());
-    if (depth !== undefined) {
-      var children = el.children();
-      while (depth-- > 0)
-        children = children.children();
-      children.html('...');
-    }
-    return el.html();
-  };
+  if($ && $.fn) {
+    $.fn.inspect = function(depth) {
+      var el = $('<div />').append(this.clone());
+      if (depth !== undefined) {
+        var children = el.children();
+        while (depth-- > 0)
+          children = children.children();
+        children.html('...');
+      }
+      return el.html();
+    };
+  }
 
   var props = {attr: 'attribute', css: 'CSS property', prop: 'property'};
   for (var prop in props) {
