@@ -232,6 +232,6 @@
   );
 
   function isJquery(obj) {
-    return obj instanceof $;
+    return obj.jquery;
   }
 }));
