@@ -41,16 +41,18 @@
       copyProperties(object, Object.getPrototypeOf(prototype));
     };
 
-  $.fn.inspect = function (depth) {
-    var el = $('<div />').append(this.clone());
-    if (depth !== undefined) {
-      var children = el.children();
-      while (depth-- > 0)
-        children = children.children();
-      children.html('...');
-    }
-    return el.html();
-  };
+  if($ && $.fn) {
+    $.fn.inspect = function(depth) {
+      var el = $('<div />').append(this.clone());
+      if (depth !== undefined) {
+        var children = el.children();
+        while (depth-- > 0)
+          children = children.children();
+        children.html('...');
+      }
+      return el.html();
+    };
+  }
 
   var props = {attr: 'attribute', css: 'CSS property', prop: 'property'};
   for (var prop in props) {
@@ -154,7 +156,7 @@
     );
   });
 
-  $.each(['visible', 'hidden', 'selected', 'checked', 'enabled', 'disabled'], function (i, attr) {
+  ['visible', 'hidden', 'selected', 'checked', 'enabled', 'disabled'].forEach(function (attr) {
     chai.Assertion.addProperty(attr, function () {
       this.assert(
           flag(this, 'object').is(':' + attr)
@@ -166,7 +168,7 @@
   chai.Assertion.overwriteProperty('exist', function (_super) {
     return function () {
       var obj = flag(this, 'object');
-      if (obj instanceof $) {
+      if (isJquery(obj)) {
         this.assert(
             obj.length > 0
           , 'expected ' + inspect(obj.selector) + ' to exist'
@@ -180,7 +182,7 @@
   chai.Assertion.overwriteProperty('empty', function (_super) {
     return function () {
       var obj = flag(this, 'object');
-      if (obj instanceof $) {
+      if (isJquery(obj)) {
         this.assert(
           obj.is(':empty')
           , 'expected #{this} to be empty'
@@ -194,7 +196,7 @@
   chai.Assertion.overwriteMethod('match', function (_super) {
     return function (selector) {
       var obj = flag(this, 'object');
-      if (obj instanceof $) {
+      if (isJquery(obj)) {
         this.assert(
             obj.is(selector)
           , 'expected #{this} to match #{exp}'
@@ -211,7 +213,7 @@
     function (_super) {
       return function (text) {
         var obj = flag(this, 'object');
-        if (obj instanceof $) {
+        if (isJquery(obj)) {
           this.assert(
               obj.is(':contains(\'' + text + '\')')
             , 'expected #{this} to contain #{exp}'
@@ -237,4 +239,8 @@
       , 'expected #{this} to have focus'
       , 'expected #{this} not to have focus');
   });
+
+  function isJquery(obj) {
+    return obj.jquery;
+  }
 }));
